@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Happy Birthday Samira</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="intro" class="overlay">
+    <div class="card">
+      <h2>Kya tum dekhna chahti ho aage kya hai?</h2>
+      <p class="muted">Click "Yes" to see the surprise. Click "No" to tease — the button will run away</p>
+      <div class="buttons">
+        <button id="yes" class="yes">Yes</button>
+        <button id="no" class="no">No</button>
+      </div>
+    </div>
+  </div>
+
+  <main id="content" class="hidden">
+    <header>
+      <h1>Happy Birthday Samira</h1>
+      <p class="lead">Aaj phir tumpe pyaar aaya hai — a surprise by Mehboob</p>
+    </header>
+
+    <section id="messageBox" class="box">
+      <div id="typed" class="typed"></div>
+    </section>
+
+    <footer class="footer">
+      <div id="signature">Made with love by Mehboob for Samira Jaan</div>
+      <div id="final" class="final hidden">Happiest Birthday again my jaan Samira</div>
+    </footer>
+  </main>
+
+  <audio id="bg" loop preload="none">
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
+
+<script>
+// Messages to type (each will be shown in sequence)
+const messages = [
+  `Happy Birthday to the one \n` +
+  `jiska wajood meri duniya ko mehsus hota noor deta hai\n` +
+  `Khuda kare tumhari muskaan kabhi madham na pade\n` +
+  `aur mere duaaon ka saya hamesha tumhare saath rahe`,
+
+  `is khaas din par dua hai\n` +
+  `zindagi tumhe wo sab de\n` +
+  `jo tum soch bhi nahi paaye\n` +
+  `aur khushiyan tumhara daaman is qadar bhar dein`,
+
+  `Tera hona meri zindagi ka sabse khoobsurat ehsaas hai\n` +
+  `Teri muskaan meri rooh ko sukoon deti hai\n` +
+  `Aur tera pyaar mera har din roshan karta hai\n` +
+  `Janmadin Mubarak meri jaan Samira`,
+
+  `Aaj phir tumpe pyaar aaya hai...\nHappiest Birthday again my Jaan`
+];
+
+// Typing effect
+const typedEl = document.getElementById('typed');
+let msgIndex = 0;
+let charIndex = 0;
+const typingSpeed = 30; // ms per char
+const pauseBetween = 900; // pause between messages
+
+function typeNextMessage() {
+  if (msgIndex >= messages.length) {
+    document.getElementById('final').classList.remove('hidden');
+    return;
+  }
+  typedEl.textContent = '';
+  charIndex = 0;
+  const msg = messages[msgIndex];
+  function step() {
+    if (charIndex <= msg.length) {
+      typedEl.textContent = msg.slice(0, charIndex);
+      charIndex++;
+      setTimeout(step, typingSpeed);
+    } else {
+      msgIndex++;
+      setTimeout(typeNextMessage, pauseBetween);
+    }
+  }
+  step();
+}
+
+// Intro buttons
+const intro = document.getElementById('intro');
+const yesBtn = document.getElementById('yes');
+const noBtn = document.getElementById('no');
+const content = document.getElementById('content');
+const audio = document.getElementById('bg');
+
+yesBtn.addEventListener('click', () => {
+  intro.classList.add('hidden');
+  content.classList.remove('hidden');
+  audio.play().catch(()=>{});
+  typeNextMessage();
+});
+
+noBtn.addEventListener('mouseover', () => {
+  const x = Math.random() * (window.innerWidth - 140);
+  const y = Math.random() * (window.innerHeight - 120);
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+});
+
+content.addEventListener('click', () => {
+  if (msgIndex < messages.length) {
+    const current = messages[Math.max(0, msgIndex-1)] || messages[0];
+    typedEl.textContent = current;
+    setTimeout(typeNextMessage, 300);
+  }
+});
+</script>
+</body>
+</html>
